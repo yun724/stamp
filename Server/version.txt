@@ -1,0 +1,9 @@
+{
+"androidVersion" : "18",
+"iosVersion" : "18",
+"serverstate": "0",
+"android" : "https://play.google.com/store/apps/details?id=com.ndream.naranggo",
+"ios" : "www.applestore.com",
+"homeUrl" : "https://test.naranggo.com",
+"testhomeurl" : "https://unimain-dev-yoon.naranggo.com"
+}

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8" />
+  <meta id="metaId" name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>eliHigh</title>
+
+  <!-- 컴포넌트 데이터 리스트 css end-->
+  <link rel="stylesheet" href="management.css">
+  <!-- <link rel="stylesheet" type="text/css" href="management.css" /> -->
+  <link rel="icon" href="data:,"> <!-- 브라우저의 favicon.ico 요청 막기 -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="management.js"></script>
+  <!-- 합쳐지고 최소화된 최신 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+  <!-- 부가적인 테마 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0px;
+      padding: 20px;
+    }
+
+    #absolutePath {
+      width: 700px;
+      /* 원하는 너비로 조정 */
+    }
+
+    #zipFolderPath {
+      width: 650px;
+      /* 원하는 너비로 조정 */
+    }
+
+    #copyFolderPath {
+      width: 650px;
+      /* 원하는 너비로 조정 */
+    }
+
+    #morphId {
+      width: 200px;
+      /* 원하는 너비로 조정 */
+    }
+
+    #filterInput {
+      width: 300px;
+      /* 원하는 너비로 조정 */
+    }
+
+    .file-explorer-wrapper {
+      height: calc(100vh - 410px); /* 예시로 상단 버튼의 높이를 100px로 가정 */
+      overflow-y: auto;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .file-explorer {
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    #fileExplorer {
+      width: 1000px;
+      background-color: #f5f5f5;
+      padding: 10px;
+    }
+
+    .folder {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 5px;
+      background-color: yellow;
+      font-weight: bolder;
+      font-size: 20px;
+    }
+
+    .folder i {
+      margin-right: 5px;
+    }
+
+    .folder.open {
+      background-color: #e0e0e0;
+    }
+
+    .file {
+      display: flex;
+      align-items: center;
+      padding: 5px;
+    }
+
+    .file i {
+      margin-right: 5px;
+    }
+
+    .file input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .sub-folder {
+      margin-left: 20px;
+      display: none;
+    }
+
+    .sub-folder.open {
+      display: block;
+    }
+
+    input[type="text"], input[type="text"].form-control {
+      border: 2px solid #000; /* 테두리 굵기와 색상을 변경 */
+    }
+
+    .btn-warning {
+      color: black;
+    }
+
+    #textDiv {
+      margin-left : 1000px;
+      top: 150px;
+      position: absolute;
+    }
+
+    #eliHighButton,
+    #woongjinButton {
+        cursor: pointer;
+        padding: 10px;
+        margin-right: 10px;
+    }
+
+    #eliHighButton {
+        background-color: gray; /* Green */
+        color: white;
+    }
+
+    #woongjinButton {
+        background-color: gray; /* Blue */
+        color: white;
+    }
+
+    #selectProject {
+      margin-left : 1000px;
+      position: absolute;
+    }
+
+    #setPurge {
+      /* display: none; */
+      margin-left : 1000px;
+      margin-top : 60px;
+
+      position: absolute;
+    }
+
+    #ipAdress {
+      width: 300px;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* 딤드 처리를 위한 반투명 배경색 */
+  }
+
+  .overlay-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      
+      padding: 20px;
+  }
+
+  #loading {
+    z-index: 1;
+  }
+
+  #centerText {
+    z-index: 1;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background-color: #ffffff;
+    padding: 20px;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    transition: transform 0.5s ease;
+  }
+
+  .hidden {
+    display: none;
+  }
+    
+  </style>
+
+
+</head>
+
+<body>
+  <div id="centerText" class="hidden">원하는 텍스트</div>
+  <div id="loading" class="overlay">
+    <div class="overlay-content">
+        <img src="../img/4.gif" alt="">
+    </div>
+  </div>
+
+  <div id = "textDiv">
+    <button id="saveLinkPath" class="btn btn-primary">경로저장</button>
+    <h6 id="textArea"></h6>
+  </div>
+  <div id="selectProject" class="col">
+    <div class="form-inline">
+        <button id="eliHighButton" onclick="selectCompany('e')">엘리하이</button>
+        <button id="woongjinButton" onclick="selectCompany('w')">웅진</button>
+    </div>
+  </div>
+  <div id = "setPurge" class="col">
+    <div class="form-inline">
+      <input type="checkbox" id="purgePossible" class="mr-2">
+      <label for="purgePossible" class="mb-0">캐시퍼지가안되면 타서버에서 퍼지하도록 요청</label>
+    </div>
+    <div id="ipAdressInputArea" class="form-inline" style="display: none;">
+      <input type="text" id="ipAdress" class="form-control mr-2" placeholder="서버ip를 입력하세요.">
+      <button id="saveIp" class="btn btn-primary">ip저장</button>
+    </div>
+    
+  </div>
+  
+  
+  <div class="row">
+    <div class="col-auto align-self-center">
+      <div class="form-inline">
+          <label for="absolutePath" class="mr-2">최상위 경로</label>
+          <input list="pathList" type="text" class="form-control mr-2" id="absolutePath" placeholder="최상위 경로를 입력하세요">
+          <button id="savePath" class="btn btn-primary">경로저장</button>
+          <button id="deleteAbsolute" class="btn btn-info">경로삭제</button>
+      </div>
+      <!-- <div class="form-inline">
+          <label for="folderName" class="mr-2">폴더 이름</label>
+          <input list="folderName" type="text" class="form-control mr-2" id="searchFolderName" placeholder="검색할 폴더를 입력하세요.">
+          <button id="deleteSearchFolderName" class="btn btn-info">경로삭제</button>
+      </div> -->
+      <!-- 검색 목록을 나열할 datalist 요소 추가 -->
+      <datalist id="pathList">
+          <!-- 이후 JavaScript에서 옵션들이 동적으로 추가됩니다. -->
+      </datalist>
+    </div>
+
+    <div>
+      <button id="showButton" class="btn btn-primary">경로내의 파일보기</button>
+      <button id="deleteRecoverAndShowButton" class="btn btn-primary">경로내의 복구 폴더/파일 삭제 후 파일보기</button>
+      <button id="updateExcel" class="btn btn-warning" style="margin-left: 100px;">그림책탐험대용엑셀업데이트</button>
+      <input type="checkbox" id="liveServerPurgePossible" style="margin-left: 330px;" class="mr-2 woonginUploadArea">
+      <label for="liveServerPurgePossible" class="mb-0 woonginUploadArea">운영서버 퍼지가능</label>
+    </div>
+  </div>
+
+  <br />
+
+  <div class="row">
+    <div class="col zipArea" id="zipArea">
+      <div class="form-inline">
+        <label for="zipFolderPath" class="mr-2">압축파일 생성 경로</label>
+        <input type="text" id="zipFolderPath" class="form-control mr-2" placeholder="최상위 경로를 입력하세요">
+        <button id="saveZipFolderPath" class="btn btn-primary">경로저장</button>
+      </div>
+    </div>
+    <div class="col zipArea">
+      <div class="form-inline">
+        <button id="getZip" class="btn btn-warning mr-2">선택된 파일들 ftp용 전부 압축하기</button>
+        <button id="getEbookZip" class="btn btn-warning mr-2">선택된 파일들 그림책 탐험대용 전부 압축하기</button>
+        <button id="uploadFtpServer" class="btn btn-danger mr-2">ftp서버 업로드</button>
+      </div>
+    </div>
+    <div class="col woonginUploadArea">
+      <div class="form-inline" >
+        <label for="userNameInput" class="mr-2">VPN 아이디</label>
+        <input type="text" class="form-control mr-2" id="userNameInput" placeholder="아이디를 입력하세요">
+        <label for="passWordInput" class="mr-2" style="margin-left: 10px;">비밀번호</label>
+        <input type="text" class="form-control mr-2" id="passWordInput" placeholder="비밀번호를 입력하세요">
+        
+      </div>
+      <br />
+      <div class="form-inline">
+        <label for="copyFolderPath" class="mr-2">복제파일 생성 경로</label>
+        <input type="text" id="copyFolderPath" class="form-control mr-2" placeholder="최상위 경로를 입력하세요">
+        <button id="saveCopyFolderPath" class="btn btn-primary">경로저장</button>
+      </div>
+      <div class="form-inline">
+        <button id="wUpload_html" class="btn btn-info mr-2">HTML CDN 최초업로드<span style="color: black; font-weight: bold;">(검증)</span></button>
+        <button id="wUpload_html_live" class="btn btn-info mr-2">HTML CDN 최초업로드<span style="color: red; font-weight: bold;">(상용)</span></button>
+        <button id="wUpload_g" class="btn btn-warning mr-2" style="margin-left: 100px;">(검증기) 업로드</button>
+        <button id="wUpload_s" class="btn btn-danger mr-2">(상용기) 업로드</button>
+        <button id="wUpload_a" class="btn btn-info mr-2" style="background: black;">(상용기, 검증, nas) 업로드</button>
+      </div>
+    </div>
+    <div class="form-inline woonginUploadArea" >
+      <input type="checkbox" id="uploadLange" class="mr-2">
+      <label for="uploadLange" class="mb-0">css, create.min.js 파일 업로드 여부</label>
+      <input type="checkbox" id="htmljsOnly" style="margin-left: 30px;" class="mr-2">
+      <label for="htmljsOnly" class="mb-0">html, js 파일만 별도로 업로드</label>
+      <input type="checkbox" id="isPurgePossible" style="margin-left: 30px;" class="mr-2">
+      <label for="isPurgePossible" class="mb-0"> 업로드용 컴퓨터가 아님</label>
+      <input type="checkbox" id="isChangeFileName" style="margin-left: 30px;" class="mr-2">
+      <label for="isChangeFileName" class="mb-0"> 파일/폴더명변경(현재시간)</label>
+    </div>  
+
+  <div class="row" id="nasLinkArea">
+    <div class="col">
+      <div class="form-inline" style="margin-left: 15px;">
+        <label for="morphId" class="mr-2">모프아이디저장(ex: sw.yoon)</label>
+        <input type="text" id="morphId" class="form-control mr-2" placeholder="nas서버 업로드를 위해 모프 아이디를 저장하세요">
+        <button id="saveMorphId" class="btn btn-primary mr-2">사용자아이디 저장</button>
+        <button id="uploadNas" class="btn btn-primary mr-2">선택된 파일들 nas서버링크업로드</button>
+        <!-- <button id="deleteLink" class="btn btn-info">링크삭제</button> -->
+      </div>
+    </div>
+  </div>
+  <h6 id="nasLink"></h6>
+
+  <br />
+  <div>  
+    <div class="row">
+      <div class="col" id="fileSearchArea">
+        <div class="form-inline" style="margin-left: 15px;">
+          <label for="filterInput" class="mr-2" >파일명으로 검색</label>
+          <input id="filterInput" type="text" class="form-control mr-2" placeholder="Filter by extension">
+          <button id="filterButton" class="btn btn-primary mr-2">검색</button>
+          <button id="cancelButton" class="btn btn-info">검색취소</button>
+        </div>
+      </div>
+      <div class="col" style="margin-left: 15px; margin-top: 5px;" id="fileSearchArea2">
+        <div class="form-inline" >
+          <label for="ageInput" class="mr-2">나이설정</label>
+          <input type="text" class="form-control mr-2" id="ageInput" placeholder="입력하지 않으면 전체나이">
+          <label for="rangeInput" class="mr-2" style="margin-left: 10px;">차시범위설정</label>
+          <input type="text" class="form-control mr-2" id="rangeStartInput" placeholder="입력하지 않으면 전체차시">
+          <span class="mr-2">~</span>
+          <input type="text" class="form-control mr-2" id ="rangeEndInput" placeholder="입력하지 않으면 전체차시">
+          <button id="searchButton" class="btn btn-primary mr-2">검색</button>
+          <button id="cancelSearchButton" class="btn btn-info">검색취소</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding-top: 10px;">
+      <button id="openButton" class="btn btn-success">선택된 파일 열기</button>
+      <button id="buildAllButton" class="btn btn-success">열려있는 모든 파일 빌드하기</button>
+      <button id="buildOneButton" class="btn btn-success">최상단 파일 빌드하기</button>
+      <button id="exportButton" class="btn btn-success">선택된 파일 열고 모두 빌드하기</button>
+    </div>
+
+    <div class="file-explorer-wrapper">
+      <div id="fileExplorer" class="file-explorer">
+        <div id="fileExplorerWrapper" class="file-list-wrapper">
+          <ul class="file-list"></ul>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="customAlertModal" tabindex="-1" role="dialog" aria-labelledby="customAlertModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="customAlertModalLabel">Alert</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="customAlertMessage"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="customConfirmModal" tabindex="-1" role="dialog" aria-labelledby="customConfirmModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="customConfirmModalLabel">Confirm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="customConfirmMessage"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="customConfirmNO" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="customConfirmOK">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</body>

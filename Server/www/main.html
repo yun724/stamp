@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8" />
+  <meta id="metaId" name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>eliHigh</title>
+
+  <!-- 컴포넌트 데이터 리스트 css end-->
+  <link rel="stylesheet" href="main.css">
+  <!-- <link rel="stylesheet" type="text/css" href="management.css" /> -->
+  <link rel="icon" href="data:,"> <!-- 브라우저의 favicon.ico 요청 막기 -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="common.js?v=1"></script>
+  <script src="language.js?v=1"></script>
+  <script src="main.js?v=1"></script>
+  <!-- 합쳐지고 최소화된 최신 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+  <!-- 부가적인 테마 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+</head>
+
+<style>
+  
+  span {
+    white-space: pre-line;
+  }
+  #topArea {
+    height: 200px;
+    width: 100%;
+    /* background-color: rgba(245, 242, 242, 0.966); */
+  }
+
+  #topArea_titleArea {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* This ensures vertical alignment in the center */
+    width: 100%; /* Ensure it takes the full width of its parent */
+    /* background-color: rgba(245, 242, 242, 0.966);  */
+    padding-top: 100px;
+    padding-left: 20px;
+    
+    height: 30%; /* topArea의 높이의 30% */
+  }
+
+  #topArea_titleArea_lang {
+    padding-right: 30px;
+    /* padding-top: 40px; */
+    /* background-color: red; */
+  }
+
+  #topArea_titleArea {
+    
+    width: 100%;
+  }
+
+  #topArea_titleArea_title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 26px;
+    /* white-space: pre-line; */
+  }
+
+  #topArea_contentsArea {
+    padding-top: 50px;
+    padding-left: 20px;
+    width: 100%;
+    height: 70%;
+    /* background-color: lightgreen; */
+  }
+
+  #middleArea {
+    top: 200px;
+    padding: 20px;
+    position: absolute;
+    width: 100%;
+    bottom: 100px;
+    /* height: calc(100% - 350px); */
+    /* background-color: yellow; */
+  }
+
+  #signInText {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+  }
+  .email-input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+  }
+  .email-input {
+      border: none;
+      border-bottom: 2px solid black;
+      padding: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 18px;
+      outline: none;
+  }
+  .email-input:focus {
+      border-bottom: 2px solid blue;
+  }
+
+  #bottomArea {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 100px;
+    /* background-color: red; */
+  }
+
+  #buttonArea {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80px;
+      width: 100%;
+      
+      margin: 0 auto;
+      /* background-color: green; */
+  }
+
+  #buttonArea button {
+      background-color: skyblue;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 16px;
+      min-width: 250px;
+      cursor: pointer;
+      font-weight: bold;
+  }
+
+  #buttonArea button:active {
+      background-color: deepskyblue;
+  }
+</style>
+  
+<body>
+    <div id="topArea">
+      <div id="topArea_titleArea">
+        <span data-i18n="greeting" id="topArea_titleArea_title">Galaxy Experience space</span>
+        <div id="topArea_titleArea_lang">
+          <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="kr">Korean</option>
+            <option value="fr">French</option>
+            <option value="jp">Japanese</option>
+            <option value="ch">Chinese</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="middleArea">
+      <div id="signInText">Sign in with your e-mail</div>
+      <div class="email-input-container">
+          <input type="email" class="email-input" placeholder="Enter your email">
+      </div>
+    </div>
+    
+    <div id="bottomArea">
+      <div id="buttonArea">
+        <button id="setEmail">Next</button>
+      </div>
+    </div>
+    
+</body>
